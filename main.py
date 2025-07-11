@@ -7,7 +7,7 @@ from rich.panel import Panel
 from rich.text import Text
 
 # Import your modules
-from modules import portscan
+from modules import defaultscan, portscan
 from modules import webscan
 from modules import dnsenum
 from utils import output_formatter
@@ -119,7 +119,11 @@ def main():
 
     # --- Call the appropriate module based on user selection ---
     try:
-        if args.module == "portscan":
+        # If no module is specified, or if explicitly called as 'defaultscan', run defaultscan
+        if args.module is None or args.module == "defaultscan":
+            console.print(f"\n[bold yellow]Running Default Scan Mode...[/bold yellow]")
+            defaultscan.run_scan(args.target, args.verbose, args.output, console)
+        elif args.module == "portscan":
             console.print(f"\n[bold yellow]Running Port Scan Module...[/bold yellow]")
             portscan.run_scan(args.target, args.ports, args.full, args.udp, args.verbose, args.output, console)
         elif args.module == "webscan":
