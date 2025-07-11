@@ -56,7 +56,7 @@ def vhost_scan(target, wordlist_path=None):
     except subprocess.CalledProcessError as e:
         console.print(f"[!] Gobuster vhost scan failed: {e}", style="bold red")
         
-        def subdomain_scan(target, wordlist_path=None):
+def subdomain_scan(target, wordlist_path=None):
             """
             Uses ffuf to scan for subdomains of the target using the specified wordlist.
             """
@@ -95,6 +95,13 @@ def vhost_scan(target, wordlist_path=None):
                 console.print(result.stdout)
             except subprocess.CalledProcessError as e:
                 console.print(f"[!] ffuf subdomain scan failed: {e}", style="bold red")
+
+def run_scan(target):
+    vhost_scan(target)
+    dir_scan(target)
+    nmap_scan(target)
+    subdomain_scan(target)
+
 
 if __name__ == "__main__":
     console = Console()

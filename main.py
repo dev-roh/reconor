@@ -7,9 +7,7 @@ from rich.panel import Panel
 from rich.text import Text
 
 # Import your modules
-from modules import defaultscan, portscan
-from modules import webscan
-from modules import dnsenum
+from modules import defaultscan, portscan, webscan, dnsenum
 from utils import output_formatter
 
 # Initialize Rich Console for pretty output
@@ -48,6 +46,11 @@ def main():
         required=True
     )
 
+    # Default Scan Module
+    defaultscan_parser = subparsers.add_parser(
+        "defaultscan",
+        help="Run the default reconnaissance scan (recommended for quick overview)."
+    )
     # Port Scan Module
     portscan_parser = subparsers.add_parser(
         "portscan",
@@ -113,7 +116,7 @@ def main():
 
     args = parser.parse_args()
 
-    console.print(Panel(Text(f"Starting Reconnaissance on [bold green]{args.target}[/bold green]", justify="center"), style="bold blue", markup=True ))
+    console.print(Panel(Text(f"Starting Reconnaissance on [bold green]{args.target}[/bold green]", justify="center", style=""), style="bold blue"))
     if args.verbose:
         console.print(f"[dim]Verbose mode enabled.[/dim]")
 
@@ -122,7 +125,7 @@ def main():
         # If no module is specified, or if explicitly called as 'defaultscan', run defaultscan
         if args.module is None or args.module == "defaultscan":
             console.print(f"\n[bold yellow]Running Default Scan Mode...[/bold yellow]")
-            defaultscan.run_scan(args.target, args.verbose, args.output, console)
+            defaultscan.run_scan(args.target)
         elif args.module == "portscan":
             console.print(f"\n[bold yellow]Running Port Scan Module...[/bold yellow]")
             portscan.run_scan(args.target, args.ports, args.full, args.udp, args.verbose, args.output, console)
